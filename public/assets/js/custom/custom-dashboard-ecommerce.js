@@ -298,16 +298,6 @@ $(document).ready(function() {
             }
         }
     });
-    /* --- Latest Order --- */
-    $('#latestorder').DataTable( {
-         "ordering": false,	
-         "searching": false
-    } );    
-    /* --- Top Products --- */
-    $('#topproducts').DataTable( {
-         "ordering": false,	
-         "searching": false
-    } );
     /* --- C3 - Stacked Area Chart --- */
     var stackedChart = c3.generate({
         bindto: '#c3-stacked-area',
