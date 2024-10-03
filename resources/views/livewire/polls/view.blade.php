@@ -19,9 +19,14 @@
             <div class="card m-b-30">
                 <div class="card-header">
                     <div class="row align-items-center">
-                        <div class="col-6">
-                            <h5 class="card-title mb-0"><small class="text-sm">SUBJECT:</small> Best Facility at Federal
-                                Polytechnic Ilaro </h5>
+                        <div class="col-12">
+                            <h5 class="card-title mb-0"><small class="text-sm">SUBJECT:</small> {{ $poll->title }} </h5>
+                        </div>
+                        <div class="col-12">
+                            <p class=" mb-0"><small class="text-sm">Description:</small> {{ $poll->description }} </p>
+                        </div>
+                        <div class="col-12">
+                            <p class=" mb-0"><small class="text-sm">Author:</small> {{ $poll->user->name }} </p>
                         </div>
 
                     </div>
@@ -29,10 +34,13 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-7">
-                            <p><i class="feather icon-disc text-primary mr-2"></i>40% - Library</p>
-                            <p><i class="feather icon-disc text-warning mr-2"></i>30% - ICT Centre</p>
-                            <p><i class="feather icon-disc text-light mr-2"></i>15% - Sports Complex</p>
-                            <p><i class="feather icon-disc text-danger mr-2"></i>15% - Engineering Workshops</p>
+                            @foreach ($poll->options as $option)
+                                @php
+                                    $percentage = $poll->votes > 0 ? ($option->votes / $poll->votes) * 100 : 0;
+                                @endphp
+                                <p><i class="feather icon-disc" style="color: {{ $option->color }};"></i>
+                                    {{ number_format($percentage) }}% - {{ $option->option }}</p>
+                            @endforeach
                         </div>
                         <div class="col-md-5">
                             <div class="chartjs-size-monitor"
@@ -52,26 +60,50 @@
                         </div>
                     </div>
                 </div>
+                @if($poll->user_id == Auth::id())
+                <div class="card-footer">
+                    <div class="row align-items-center">
+                        <div class="col-12">
+                            <button wire:click="delete('{{ $poll->id }}')" class="btn btn-danger btn-sm">Delete Poll</button>
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>
     @push('script')
-        <script>
-            var pieChartID = document.getElementById("chartjs-pie-chart").getContext('2d');
-            var pieChart = new Chart(pieChartID, {
-                type: 'pie',
-                data: {
-                    datasets: [{
-                        data: [15, 30, 20, 35],
-                        borderColor: 'transparent',
-                        backgroundColor: ["#6e81dc", "#fcc100", "#dcdde1", 'red'],
-                        label: 'Dataset 1'
-                    }],
-                    labels: ['Library', 'ICT Centre', 'Sports Complex', 'Engineering Workshops']
-                },
-                options: {
-                    responsive: true
-                }
-            });
-        </script>
+    @push('script')
+    <script>
+        var pollData = @json($poll->options->map(function($option) {
+            return [
+                'label' => $option->option,
+                'votes' => $option->votes,
+                'color' => $option->color
+            ];
+        }));
+
+        var labels = pollData.map(option => option.label);
+        var votes = pollData.map(option => option.votes);
+        var colors = pollData.map(option => option.color);
+
+        var pieChartID = document.getElementById("chartjs-pie-chart").getContext('2d');
+        var pieChart = new Chart(pieChartID, {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: votes,
+                    borderColor: 'transparent',
+                    backgroundColor: colors,
+                    label: 'Poll Results'
+                }],
+                labels: labels
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+@endpush
+
     @endpush

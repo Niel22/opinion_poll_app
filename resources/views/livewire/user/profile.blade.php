@@ -24,8 +24,8 @@
                                 style="filter: invert(0);"></div>
                     </div>
                     <div class="item-user pro-user">
-                        <h4 class="pro-user-username text-dark mt-2 mb-0">Sonia Taylor</h4>
-                        <p class="pro-user-desc text-muted mb-1">Staff</p>
+                        <h4 class="pro-user-username text-dark mt-2 mb-0">{{ Auth::user()->name }}</h4>
+                        <p class="pro-user-desc text-muted mb-1">{{ Auth::user()->role }}</p>
 
                     </div>
                 </div>
@@ -55,8 +55,24 @@
                     <div class="main-profile-contact-list main-profile-work-list">
                         <div class="media">
                             <div class="media-logo bg-light text-dark"> <i class="fe fe-phone tx-15"></i> </div>
-                            <div class="media-body"> <span>Email</span>
-                                <div> niel2264@gmail.com </div>
+                            <div class="media-body"> <span>Email:</span>
+                                <div style="font-weight: bold"> niel2264@gmail.com </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-profile-contact-list main-profile-work-list">
+                        <div class="media">
+                            <div class="media-logo bg-light text-dark"> <i class="fe fe-phone tx-15"></i> </div>
+                            <div class="media-body"> <span>Faculty:</span>
+                                <div style="font-weight: bold"> {{ Auth::user()->faculty->name }} </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-profile-contact-list main-profile-work-list">
+                        <div class="media">
+                            <div class="media-logo bg-light text-dark"> <i class="fe fe-phone tx-15"></i> </div>
+                            <div class="media-body"> <span>Department:</span>
+                                <div style="font-weight: bold"> {{ Auth::user()->department->name }} </div>
                             </div>
                         </div>
                     </div>

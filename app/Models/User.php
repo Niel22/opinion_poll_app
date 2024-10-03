@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Department;
+use App\Models\Faculty;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'faculty_id',
+        'department_id'
     ];
 
     /**
@@ -43,5 +48,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function faculty(){
+        return $this->belongsTo(Faculty::class, 'faculty_id', 'id');
+    }
+
+    public function department(){
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+    public function vote(){
+        return $this->hasMany(PollVote::class);
+    }
+
+    public function polls(){
+        return $this->hasMany(Poll::class);
     }
 }

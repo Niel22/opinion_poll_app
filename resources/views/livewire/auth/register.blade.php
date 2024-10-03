@@ -1,50 +1,63 @@
 <div class="auth-box-right">
     <div class="card">
         <div class="card-body">
-            <form action="#">
+            <form wire:submit="register">
                 <h4 class="text-primary mb-4">Sign Up !</h4>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="username" placeholder="Enter Full name here" required>
+                    <input type="text" class="form-control" id="name" placeholder="Enter Full name here" wire:model="name">
+                    @error('name')
+                    <span class="text-sm text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-control" id="email" placeholder="Enter Email here" required>
+                    <input type="email" class="form-control" id="email" placeholder="Enter Email here" wire:model="email">
+                    @error('email')
+                    <span class="text-sm text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" id="password" placeholder="Enter Password here" required>
+                    <input type="password" class="form-control" id="password" placeholder="Enter Password here" wire:model="password">
+                    @error('password')
+                    <span class="text-sm text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" id="re-password" placeholder="Re-Type Password" required>
+                    <input type="password" class="form-control" id="re-password" placeholder="Re-Type Password" wire:model="password_confirmation">
                 </div>
                 <div class="form-group">
-                    <select class="form-control" wire:model="audience">
+                    <select class="form-control" wire:model="role">
                         <option value="">Are you a staff or student?</option>
                         <option value="staffs">Staff</option>
                         <option value="students">Student</option>
                     </select>
+                    @error('audience')
+                    <span class="text-sm text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group">
-                    <select class="form-control" wire:model="faculty">
+                    <select class="form-control text-capitalize" wire:model.live="faculty_id">
                         <option value="">Select Your Faculty</option>
-                        <option value="all faculty">All Faculty</option>
-                        <option value="school of pure and applied science">School of Pure and Applied Science</option>
-                        <option value="school of agric">School of Agric</option>
-                        <option value="school of engineering">School of Engineering</option>
-                        <option value="school of environmental studies">School of Environmental Studies</option>
-                        <option value="school of management studies">School of Management Studies</option>
-                        <option value="school of communication and information">School of Communication and Information</option>
+                        @foreach($faculties as $faculty)
+                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                        @endforeach
                     </select>
+                    @error('faculty')
+                    <span class="text-sm text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
+                @if($departments)
                 <div class="form-group">
-                    <select class="form-control" wire:model="faculty">
+                    <select class="form-control" wire:model="department_id">
                         <option value="">Select Your Department</option>
-                        <option value="all department">All Department under this faculty</option>
-                        <option value="computer science">Computer Science</option>
-                        <option value="food technology">Food Technology</option>
-                        <option value="nutrition and diatetics">Nutrition and Diatetics</option>
-                        <option value="mathematics and statistic">Mathematics and Statistic</option>
-                        <option value="hospitality management">Hospitality Management</option>
+                        @foreach($departments as $department)
+                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                        @endforeach
                     </select>
+                    @error('department')
+                    <span class="text-sm text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
+                @endif
                 <div class="form-row mb-3">
                     <div class="col-sm-12">
                         <div class="custom-control custom-checkbox">
@@ -53,7 +66,13 @@
                         </div>
                     </div>
                 </div>
-              <button type="submit" class="btn btn-success btn-lg btn-block font-18">Sign up Now</button>
+                <div wire:loading wire:loading.class="d-block">
+                    <div class="d-flex align-items-center">
+                        <strong>Loading...</strong>
+                        <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+                    </div>
+                </div>
+              <button wire:loading.attr="disabled" type="submit" class="btn btn-success btn-lg btn-block font-18">Sign up Now</button>
             </form>
             <p class="mb-0 mt-3">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
         </div>
