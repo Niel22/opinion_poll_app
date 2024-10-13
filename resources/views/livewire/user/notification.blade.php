@@ -1,4 +1,4 @@
-<div id="infobar-notifications-sidebar" class="infobar-notifications-sidebar" wire:poll.15s>
+<div id="infobar-notifications-sidebar" class="infobar-notifications-sidebar" wire:poll.15s wire:ignore.self>
     <div class="infobar-notifications-sidebar-head d-flex w-100 justify-content-between">
         <h4>Notifications</h4><a href="javascript:void(0)" id="infobar-notifications-close" class="infobar-notifications-close"><img src="{{ asset('assets/images/svg-icon/close.svg') }}" class="img-fluid menu-hamburger-close" alt="close"></a>
     </div>

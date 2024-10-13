@@ -28,6 +28,9 @@
                         <div class="col-12">
                             <p class=" mb-0"><small class="text-sm">Author:</small> {{ $poll->user->name }} </p>
                         </div>
+                        <div class="col-12">
+                            <p class=" mb-0"><small class="text-sm">Expiry Date:</small> {{ \Carbon\Carbon::parse($poll->expiry_date)->format('M d, Y h:i A') }} ({{ \Carbon\Carbon::parse($poll->expiry_date)->diffForHumans() }}) </p>
+                        </div>
 
                     </div>
                 </div>

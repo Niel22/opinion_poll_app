@@ -26,13 +26,62 @@
                     <div class="card m-b-30">
                         <div class="card-header d-flex justify-content-between">
                             <h5 class="card-title">Creator: {{ $poll->user->name }}</h5>
+                            @if(\Carbon\Carbon::parse($poll->expiry_date)->isPast())
+                            <h5 class="card-title">
+                                Poll has ended</h5>
+                                @else
                             <h5 class="card-title">Expires in:
-                                {{ \Carbon\Carbon::parse($poll->expiry_date)->diffForHumans() }}</h5>
+                                {{  \Carbon\Carbon::parse($poll->expiry_date)->diffForHumans() }}</h5>
+                                @endif
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <h3 class="col-sm-12">{{ $poll->title }}</h3>
                             </div>
+                            @if(\Carbon\Carbon::parse($poll->expiry_date)->isPast())
+                            <div class="progressbar-list">
+                                <div>
+                                    @foreach ($poll->options as $option)
+                                        @php
+                                            $percentage =
+                                                $totalVotes > 0 ? ($option->votes / $totalVotes) * 100 : 0; // Avoid division by zero
+                                        @endphp
+                                        <h5>{{ $option->option }}:</h5>
+                                        <div class="progress mb-2 d-flex justify-content-between align-content-center"
+                                            style="height: 25px;">
+                                            <div class="progress-bar text-white text-center"
+                                                style="background-color: {{ $option->color }}; width: {{ $percentage }}%;"
+                                                role="progressbar" aria-valuenow="{{ $percentage }}"
+                                                aria-valuemin="0" aria-valuemax="100">
+                                                @if ($percentage >= 10)
+                                                    <div class="d-flex align-items-center pr-1 justify-content-end">
+                                                        <span class="text-white"
+                                                            style="font-weight: bold; font-size: 13px">{{ number_format($percentage) }}%
+                                                            <i
+                                                                class="mdi mdi-check-circle-outline text-success me-2"></i>
+                                                        </span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            @if ($percentage < 10)
+                                                <div class="d-flex align-items-center pr-1">
+                                                    <span class="text-dark"
+                                                        style="font-weight: bold; font-size: 13px">{{ number_format($percentage) }}%
+                                                        <i
+                                                            class="mdi mdi-check-circle-outline text-success me-2"></i>
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <a href="{{ route('poll.view', Crypt::encryptString($poll->id)) }}"
+                                    class="btn btn-sm btn-secondary">View
+                                    Details</a>
+                            </div>
+                            @else
                             @if ($poll->hasUserVoted(Auth::id()))
                                 <div class="progressbar-list">
                                     <div>
@@ -90,6 +139,7 @@
                                             <div class="spinner-border m-auto " role="status" aria-hidden="true"></div>
                                         </div>
                                 </div>
+                            @endif
                             @endif
                         </div>
                     </div>

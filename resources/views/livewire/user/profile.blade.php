@@ -33,12 +33,12 @@
                     <div class="row text-center">
                         <div class="col-sm-6 border-right">
                             <div class="description-block">
-                                <h5 class="description-header mb-1">689k</h5> <span class="text-muted">Total Polls</span>
+                                <h5 class="description-header mb-1">{{ Auth::user()->polls->count() }}</h5> <span class="text-muted">Total Polls</span>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="description-block">
-                                <h5 class="description-header mb-1">3,765</h5> <span class="text-muted">Totak Poll Participation</span>
+                                <h5 class="description-header mb-1">{{ Auth::user()->polls->sum('votes') }}</h5> <span class="text-muted">Totak Poll Participation</span>
                             </div>
                         </div>
                     </div>
